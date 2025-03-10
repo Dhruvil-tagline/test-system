@@ -81,6 +81,7 @@ const Login = () => {
         <label htmlFor='password'>Password:</label> <span className='error'>{error.passwordError}</span> <br />
         <input type='password' value={user.password} onChange={(e) => handleChange(e)} id='password' name='password' /> <br />
         <button>Login</button>
+        <p><Link to='/forgetPassword'>Forget password</Link></p>
               <p>If you are not SingUp yet then  <Link to='/signup'> SignUp</Link></p>
       </form>
     </div>

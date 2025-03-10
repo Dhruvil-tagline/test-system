@@ -6,6 +6,8 @@ import Home from './components/Home'
 import TeacherPage from './components/TeacherPage'
 import StudentPage from './components/StudentPage'
 import Protected from './components/Protected'
+import ForgetPassword from './components/ForgetPassword'
+import PageNotFound from './components/PageNotFound'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,13 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Login />
   },
+  {
+    path: '/forgetPassword',
+    element: <ForgetPassword/>
+  }, {
+    path: '*',
+    element: <PageNotFound/>
+  }
 ])
 
 function App() {
