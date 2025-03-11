@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, } from 'react-router-dom'
 import '../Css/SignUp.css'
+import { toast } from 'react-toastify';
 import axios from 'axios'
 
 let regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -15,7 +16,6 @@ const userObj = {
 }
 
 const Login = () => {
-  let flagValidate = false;
   const [user, setUser] = useState(userObj);
   const [error, setError] = useState(errorObj)
   const navigate = useNavigate();
@@ -24,22 +24,24 @@ const Login = () => {
   }
     
   const validate = () => {
+    let flagValidate = false;
     if (!user.email) {
-      setError((prev) => { return { ...prev, 'emailError': 'Email is required' } })
+      setError((prev) => ({ ...prev, 'emailError': 'Email is required' }))
       flagValidate = true;
     }
     else if (!regexEmail.test(user.email)) {
-      setError((prev) => { return { ...prev, 'emailError': 'Email is not valid' } })
+      setError((prev) =>  ({ ...prev, 'emailError': 'Email is not valid' }))
       flagValidate = true;
     }
     if (!user.password) {
-      setError((prev) => { return { ...prev, 'passwordError': 'Password is required' } })
+      setError((prev) => ({ ...prev, 'passwordError': 'Password is required' }))
       flagValidate = true;
     }
     // else if (!regexPassword.test(user.password)) {
-    //   setError((prev) => { return { ...prev, 'passwordError': 'Password is too weak it ,it contains at least 8 character, one upperCase letter, one lowerCase letter,  one digit , one special character' } })
+    //   setError((prev) =>  ({ ...prev, 'passwordError': 'Password is too weak it ,it contains at least 8 character, one upperCase letter, one lowerCase letter,  one digit , one special character' }))
     //   flagValidate = true;
     // }
+    return flagValidate;
   }
 
   const isAuthenticated = async () => {
@@ -54,23 +56,25 @@ const Login = () => {
         data: JSON.stringify(user)
       });
       let response = await data.data;
-      if (response) {
-        console.log(response);
+      if (response.statusCode === 200) {
+        console.log(response?.data?.role);
+        console.log(response?.data?.token);
+        document.cookie = `token = ${response?.data?.token}`;
         setUser({ ...userObj });
-        navigate('/')
+        toast.success("Login successfully")
+        navigate(`/${response?.data?.role}`)
       }
       else {
-        alert('Invalid Credential')
+        toast.error('Invalid Credential or first visit mail and allow for access')
       }
     } catch (error) {
-        console.log(error)
+      toast.error('Server Error')
     }
   }
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError({ ...errorObj })
-    validate();
-    (!flagValidate) && isAuthenticated();
+    setError(errorObj);
+    (!validate()) && isAuthenticated();
   }
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', marginTop: "300px" }}>

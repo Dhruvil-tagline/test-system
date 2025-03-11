@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import '../Css/SignUp.css'
-import axios  from 'axios';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 let regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 let regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&])[A-Za-z\d@.#$!%*?&]{8,15}$/;
@@ -20,7 +21,6 @@ const userObj = {
 }
 
 const SignUp = () => {
-  let flagValidate = false;
   const [user, setUser] = useState(userObj);
   const navigate = useNavigate();
   const [error, setError] = useState(errorObj)
@@ -28,39 +28,37 @@ const SignUp = () => {
     setUser({ ...user, [e.target.name]: e.target.value })
   }
 
-
-
   const validate = () => {
+    let flagValidate = false;
     if (!user.name) {
-      setError((prev) => { return { prev, 'nameError': 'Name is required' } })
+      setError((prev) => ({ ...prev, 'nameError': 'Name is required' }))
       flagValidate = true;
     }
     // else if (!regexName.test(user.name)) {
-    //   setError((prev) => {
-    //     return { ...prev, 'nameError': 'Name is not valid' }
-    //   })
+    //   setError((prev) => ({ ...prev, 'nameError': 'Name is not valid'}))
     //   flagValidate = true;
     // }
     if (!user.email) {
-      setError((prev) => { return { ...prev, 'emailError': 'Email is required' } })
+      setError((prev) => ({ ...prev, 'emailError': 'Email is required' }))
       flagValidate = true;
     }
     else if (!regexEmail.test(user.email)) {
-      setError((prev) => { return { ...prev, 'emailError': 'Email is not valid' } })
+      setError((prev) => ({ ...prev, 'emailError': 'Email is not valid' }))
       flagValidate = true;
     }
     if (!user.password) {
-      setError((prev) => { return { ...prev, 'passwordError': 'Password is required' } })
+      setError((prev) => ({ ...prev, 'passwordError': 'Password is required' }))
       flagValidate = true;
     }
     // else if (!regexPassword.test(user.password)) {
-    //   setError((prev) => { return { ...prev, 'passwordError': 'Password is too weak it ,it contains at least 8 character, one upperCase letter, one lowerCase letter,  one digit , one special character' } })
+    //   setError((prev) =>  ({ ...prev, 'passwordError': 'Password is too weak it ,it contains at least 8 character, one upperCase letter, one lowerCase letter,  one digit , one special character' }))
     //   flagValidate = true;
     // }
     if (!user.role) {
-      setError((prev) => { return { ...prev, 'roleError': 'role is required' } })
+      setError((prev) => ({ ...prev, 'roleError': 'role is required' }))
       flagValidate = true;
     }
+    return flagValidate;
   }
   const addUser = async () => {
     try {
@@ -70,28 +68,32 @@ const SignUp = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        data: JSON.stringify(user),
+        data: user,
       });
       let response = await data.data;
-      if (response.statusCode === 200) {
+      if (response) {
         console.log(response)
+      }
+      if (response.statusCode === 200) {
+        console.log(response);
+        toast.success('Signup successfully')
         console.log(response?.data?.role)
         setUser({ ...userObj });
-        navigate(`/${response?.data?.role}`)
+        navigate('/login');
       }
       else {
-        alert(response?.message);
+        toast.error(response?.message);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      toast.error('Server Error')
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError({...errorObj})
-    validate();
-    (!flagValidate) && addUser()
+    setError(errorObj);
+    (!validate()) && addUser()
     
   }
   return (
