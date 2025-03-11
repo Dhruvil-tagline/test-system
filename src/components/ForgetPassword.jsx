@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import InputCom from '../CommonComponent/InputCom';
+import ButtonCom from '../CommonComponent/ButtonCom';
 let regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const ForgetPassword = () => {
@@ -47,20 +49,17 @@ const ForgetPassword = () => {
     }
 
     return (
-        <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', marginTop: "300px" }}>
-            <div>
-                <form onSubmit={handleSubmit} onReset={() => { setSearch(''); setError('') }}>
+        <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
+            <form onSubmit={handleSubmit} onReset={() => { setSearch(''); setError('') }} style={{ maxWidth: '500px', width: '100%' }}>
                     <h1>Find Your Account</h1> <br />
                     <p>Please enter your email address  to search for your account.</p>
-                    <br />
-                    <input type='email' name='search' value={search} onChange={(e) => setSearch(e.target.value)} />
+                    <InputCom type='email' name='search' value={search} onChange={(e) => setSearch(e.target.value)} />
                     <span>{error}</span>
-                    <br /><br />
-                    <button style={{ display: 'inline-block', marginRight: '20px' }}>Search</button>
-                    <button type="reset">Cancel</button> <br /> <br />
-                </form>
-                <button onClick={() => navigate(-1)}>Go Back</button>
-            </div>
+                    <div style={{display:'flex', gap:'20px'}}>
+                    <ButtonCom style={{ display: 'inline-block', marginRight: '20px' }} text='Search' />
+                     <ButtonCom onClick={() => navigate(-1)} text='Back'/>
+                    </div>
+                </form> 
 
         </div>
     )

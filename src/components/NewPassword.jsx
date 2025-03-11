@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, {useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import InputCom from '../CommonComponent/InputCom';
+import ButtonCom from '../CommonComponent/ButtonCom';
 
 
 const NewPassword = () => {
@@ -54,14 +56,14 @@ const NewPassword = () => {
         (validate()) && fetchData()
     }
   return (
-      <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', marginTop: "300px" }}>
+      <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
           
-          <form onSubmit={handleSubmit} >
+          <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
           <h1>Reset Account password</h1>
           <br/>
-              <input placeholder='New password' value={password} onChange={(e)=> setPassword(e.target.value)} /> <br/> <br/>
-              <input placeholder='Confirm password' value={confirmPassword} onChange={(e) => setConfirm(e.target.value)} /><br /> <br />
-              <button>Submit</button>
+              <InputCom placeholder='New password' value={password} onChange={(e)=> setPassword(e.target.value)} /> 
+              <InputCom placeholder='Confirm password' value={confirmPassword} onChange={(e) => setConfirm(e.target.value)} />
+              <ButtonCom text='Submit' type='submit'/>
           </form>
     </div>
   )

@@ -10,6 +10,9 @@ import Protected from './components/Protected'
 import ForgetPassword from './components/ForgetPassword'
 import PageNotFound from './components/PageNotFound'
 import NewPassword from './components/NewPassword'
+import TeacherDashboard from './components/TeacherDashboard'
+import TeacherStu from './components/TeacherStu'
+import TeacherProfile from './components/TeacherProfile'
 
 const router = createBrowserRouter([
   {
@@ -18,12 +21,26 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/teacher',
-        element: <TeacherPage/>
+        element: <TeacherPage />,
+        children: [
+          {
+            path: '/teacher/dashboard',
+            element: <TeacherDashboard />,
+          },
+          {
+            path: '/teacher/student',
+            element: <TeacherStu />,
+          },
+          {
+            path: '/teacher/profile',
+            element: <TeacherProfile />,
+          }
+        ]
       },
       {
         path: '/student/',
-        element: <StudentPage/>
-      }
+        element: <StudentPage/>,
+      },
     ]
   },
   {
