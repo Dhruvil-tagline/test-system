@@ -4,7 +4,8 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import InputCom from '../CommonComponent/InputCom';
 import ButtonCom from '../CommonComponent/ButtonCom';
-let regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+import { validateEmail } from '../utils/validation';
+import { postRequest } from '../utils/api';
 
 const ForgetPassword = () => {
     const [search, setSearch] = useState('');
@@ -12,40 +13,20 @@ const ForgetPassword = () => {
     const [error, setError] = useState('');
 
     const searchUser = async () => {
-        try {
-            const output = await axios({
-                url: "https://examination.onrender.com/users/ForgotPassword",
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                data: JSON.stringify({ email: search }),
-            })
-            const response = await output.data;
+        let response = await postRequest('ForgotPassword', { email: search })
             if (response.statusCode === 200) {
                 console.log(response);
-                toast.success('Mail successfully send to you account. reset password and than go to login page')
+                toast.success('check email and reset Password')
             }
             else {
-                toast.error('User not find! try another email id or sign up')
+                toast.error('User not find!')
             }
-        } catch (error) {
-            console.log(error);
-            toast.error('Server Error')
-        }
     }
     const handleSubmit = (e) => {
         setError('')
         e.preventDefault()
-        if (!search) {
-            setError('Email is required');
-        }
-        else if (!regexEmail.test(search)) {
-            setError('enter valid emil');
-        }
-        else {
-            searchUser();
-        }   
+        let emailValidate = validateEmail(search);
+        (emailValidate) ? setError(emailValidate) : searchUser();
     }
 
     return (

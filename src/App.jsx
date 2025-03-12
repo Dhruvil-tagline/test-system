@@ -13,6 +13,7 @@ import NewPassword from './components/NewPassword'
 import TeacherDashboard from './components/TeacherDashboard'
 import TeacherStu from './components/TeacherStu'
 import TeacherProfile from './components/TeacherProfile'
+import { AuthProvider } from './Context/AuthProvider'
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
         element: <TeacherPage />,
         children: [
           {
-            path: '/teacher/dashboard',
+            path: '/teacher/',
             element: <TeacherDashboard />,
           },
           {
@@ -68,8 +69,10 @@ function App() {
   return (
     <>
       <div className='rootContainer'>
+        <AuthProvider>
         <RouterProvider router={router} />
         <ToastContainer />
+        </AuthProvider>
       </div>
     </>
   )

@@ -1,72 +1,50 @@
 import axios from 'axios';
-import React, {useState } from 'react'
+import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import InputCom from '../CommonComponent/InputCom';
 import ButtonCom from '../CommonComponent/ButtonCom';
-
+import { validatePassword } from '../utils/validation';
+import { postRequest } from '../utils/api';
+import { useAuth } from '../Context/AuthProvider';
 
 const NewPassword = () => {
+    const { setToken } = useAuth();
     const [password, setPassword] = useState('');
     let token;
     const [searchParams] = useSearchParams();
     const [confirmPassword, setConfirm] = useState('');
     token = searchParams.get('token');
-
     const fetchData = async () => {
-        try {
-            const output = await axios({
-                url: `https://examination.onrender.com/users/ForgotPassword/Verify?token=${token}`,
-                data: { Password: password, ConfirmPassword: confirmPassword },
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            const response = await output.data;
-            if (response) {
-                console.log(response)
-            }
-            if (response.statusCode === 200) {
-                toast.success('password reset successfully.');
-                console.log(response);
-                document.cookie = `token = ${token}`;
-            }
-            else {
-                toast.error(response?.message)
-            }
-        } catch (error) {
-            console.log(error)
-            toast.error('Server Error')
+        let response = await postRequest(`ForgotPassword/Verify?token=${token}`, { Password: password, ConfirmPassword: confirmPassword })
+        if (response) {
+            console.log(response)
         }
-    }
-    const validate = () => {
-        if (!password) {
-            toast.error('password is required');
-            return false;
+        if (response.statusCode === 200) {
+            toast.success('password reset successfully.');
+            // document.cookie = `token = ${token}`;
+            setToken(token);
         }
-        if (password !== confirmPassword) {
-            toast.error('password is not matched with confirm password');
-            return false;
+        else {
+            toast.error(response?.message)
         }
-        return true
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        (validate()) && fetchData()
+        let passwordValidation = validatePassword(password, confirmPassword);
+        (passwordValidation) ? toast.error(passwordValidation) : fetchData()
     }
-  return (
-      <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
-          
-          <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
-          <h1>Reset Account password</h1>
-          <br/>
-              <InputCom placeholder='New password' value={password} onChange={(e)=> setPassword(e.target.value)} /> 
-              <InputCom placeholder='Confirm password' value={confirmPassword} onChange={(e) => setConfirm(e.target.value)} />
-              <ButtonCom text='Submit' type='submit'/>
-          </form>
-    </div>
-  )
-}
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
 
+            <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
+                <h1>Reset Account password</h1>
+                <br />
+                <InputCom placeholder='New password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                <InputCom placeholder='Confirm password' value={confirmPassword} onChange={(e) => setConfirm(e.target.value)} />
+                <ButtonCom text='Submit' type='submit' />
+            </form>
+        </div>
+    )
+}
 export default NewPassword

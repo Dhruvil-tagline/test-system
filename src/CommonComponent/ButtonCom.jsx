@@ -1,9 +1,9 @@
 import { Padding } from "@mui/icons-material"
 
-const ButtonCom = ({onClick,text, type}) => {
+const ButtonCom = ({ onClick, text, type, disabled }) => {
   return (
-    <div style={{padding:'10px'}}>
-          <button style={{ border: '1px solid  transparent', borderRadius: '8px', padding: '0.6em 2em', fontSize: '1em', background:'#1a1a1a',cursor:'pointer', }} type={type} onClick={onClick}>{text}</button>
+    <div style={{padding:'10px 0px'}}>
+          <button disabled={disabled} style={{ border: '1px solid  transparent', borderRadius: '8px', padding: '0.6em 2em', fontSize: '1em', background:'#1a1a1a',cursor:'pointer', }} type={type} onClick={onClick}>{text}</button>
     </div>
   )
 }

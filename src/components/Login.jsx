@@ -1,73 +1,51 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link, useNavigate, } from 'react-router-dom'
 import '../Css/SignUp.css'
 import { toast } from 'react-toastify';
-import axios from 'axios'
-import { regexEmail, regexPassword } from '../StaticData/regex';
 import { errorObj, userObj } from '../StaticData/staticObj';
 import InputCom from '../CommonComponent/InputCom';
 import ButtonCom from '../CommonComponent/ButtonCom';
+import { postRequest } from '../utils/api';
+import { validateEmail, validatePassword } from '../utils/validation';
+import { AuthContext, useAuth } from '../Context/AuthProvider';
 
 const Login = () => {
   const [user, setUser] = useState(userObj);
+  const { setToken } = useAuth();
+
   const [error, setError] = useState(errorObj)
   const navigate = useNavigate();
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })
   }
-    
   const validate = () => {
-    let flagValidate = false;
-    if (!user.email) {
-      setError((prev) => ({ ...prev, 'emailError': 'Email is required' }))
-      flagValidate = true;
-    }
-    else if (!regexEmail.test(user.email)) {
-      setError((prev) =>  ({ ...prev, 'emailError': 'Email is not valid' }))
-      flagValidate = true;
-    }
-    if (!user.password) {
-      setError((prev) => ({ ...prev, 'passwordError': 'Password is required' }))
-      flagValidate = true;
-    }
-    // else if (!regexPassword.test(user.password)) {
-    //   setError((prev) =>  ({ ...prev, 'passwordError': 'Password is too weak it ,it contains at least 8 character, one upperCase letter, one lowerCase letter,  one digit , one special character' }))
-    //   flagValidate = true;
-    // }
-    return flagValidate;
+    const errors = {};
+    errors.emailError = validateEmail(user.email);
+    errors.passwordError = validatePassword(user.password);
+    setError(errors);
+    return Object.values(errors).every((val) => !val);
   }
 
   const isAuthenticated = async () => {
-    console.log('function called')
-    try {
-      let data = await axios({
-        url: 'https://examination.onrender.com/users/Login',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: JSON.stringify(user)
-      });
-      let response = await data.data;
+    console.log('function called');
+    let response = await postRequest('Login', user)
       if (response.statusCode === 200) {
         console.log(response?.data?.role);
         console.log(response?.data?.token);
-        document.cookie = `token = ${response?.data?.token}`;
+        // document.cookie = `token = ${response?.data?.token}`;
+        setToken(response?.data?.token)
         setUser({ ...userObj });
         toast.success("Login successfully")
         navigate(`/${response?.data?.role}`)
       }
       else {
-        toast.error('Invalid Credential or first visit mail and allow for access')
+        toast.error('Invalid Credential')
       }
-    } catch (error) {
-      toast.error('Server Error')
-    }
   }
   const handleSubmit = (e) => {
     e.preventDefault();
     setError(errorObj);
-    (!validate()) && isAuthenticated();
+    (validate()) && isAuthenticated();
   }
   return (
     <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>

@@ -1,9 +1,10 @@
 import React from 'react'
+import TeacherForm from './TeacherForm'
 
 const TeacherDashboard = () => {
   return (
     <div>
-      <h1>TeacherDashboard</h1>
+            <TeacherForm/>
     </div>
   )
 }
