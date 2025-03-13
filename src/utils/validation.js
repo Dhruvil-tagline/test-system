@@ -20,7 +20,7 @@ export const validateEmail = (email) => {
 export const validatePassword = (password, confirmPassword) => {
     if (!password) return 'Password is required';
     // if (!regexPassword.test(password)) return 'Password is too weak';
-    if (confirmPassword !== undefined && password !== confirmPassword) return 'Passwords do not match';
+    if (confirmPassword !== undefined && password !== confirmPassword) return 'Passwords did not match';
     return null;
 };
 

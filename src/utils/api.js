@@ -27,3 +27,15 @@ export const getRequest = async (url, token = '') => {
         throw new Error('Server Error');
     }
 };
+
+export const deleteRequest = async (url, token = '') => {
+    try {
+        const response = await axios.delete(`${API_BASE_URL}/${url}`, {
+            headers: token ? { 'access-token': token } : {},
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Server Error');
+    }
+}
