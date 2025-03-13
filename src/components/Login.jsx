@@ -28,7 +28,7 @@ const Login = () => {
 
   const isAuthenticated = async () => {
     console.log('function called');
-    let response = await postRequest('Login', user)
+    let response = await postRequest('users/Login', user)
       if (response.statusCode === 200) {
         console.log(response?.data?.role);
         console.log(response?.data?.token);

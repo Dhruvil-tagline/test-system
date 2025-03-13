@@ -16,7 +16,7 @@ const NewPassword = () => {
     const [confirmPassword, setConfirm] = useState('');
     token = searchParams.get('token');
     const fetchData = async () => {
-        let response = await postRequest(`ForgotPassword/Verify?token=${token}`, { Password: password, ConfirmPassword: confirmPassword })
+        let response = await postRequest(`users/ForgotPassword/Verify?token=${token}`, { Password: password, ConfirmPassword: confirmPassword })
         if (response) {
             console.log(response)
         }

@@ -26,7 +26,7 @@ const SignUp = () => {
     return Object.values(errors).every((val) => !val);
   }
   const addUser = async () => {
-    let response = await postRequest('SignUp', user)
+    let response = await postRequest('users/SignUp', user)
       if (response) {
         console.log(response)
       }

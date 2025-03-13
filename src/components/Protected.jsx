@@ -9,7 +9,7 @@ const Protected = ({ children }) => {
     // const parts = value.split(`token=`);
     // let token = parts[parts.length - 1];
     const getToken = async () => {
-        let response = await getRequest('newPassword', token)
+        let response = await getRequest('users/newPassword', token)
             if (response.statusCode === 200) {
                 console.log(response)
             }

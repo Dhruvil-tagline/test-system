@@ -51,7 +51,7 @@ const SingleQuestion = () => {
                 {
                     !!data.options.length &&
                     data.options.map((val, index) => (
-                        <RadioCom key={index} name='option' text={val} value={val} onChange={(e) => setData((prev) => ({ ...prev, answer: e.target.value }))} />)
+                        <RadioCom key={index} name='option' text={val} value={val} onChange={(e) => setData((prev) => ({ ...prev, answer: e.target.value }))} />))
                 }
                 {/* <RadioCom name='option' text='option1' />
                 <RadioCom name='option' text='option2' />

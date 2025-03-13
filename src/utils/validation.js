@@ -6,6 +6,11 @@ export const validateName = (name) => {
     return null;
 }
 
+export const validateEmpty = (name, text) =>{
+    if (!name) return ` ${text} is required`;
+    return null;
+}
+
 export const validateEmail = (email) => {
     if (!email) return 'Email is required';
     if (!regexEmail.test(email)) return 'Enter a valid email';

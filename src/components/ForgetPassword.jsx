@@ -13,7 +13,7 @@ const ForgetPassword = () => {
     const [error, setError] = useState('');
 
     const searchUser = async () => {
-        let response = await postRequest('ForgotPassword', { email: search })
+        let response = await postRequest('users/ForgotPassword', { email: search })
             if (response.statusCode === 200) {
                 console.log(response);
                 toast.success('check email and reset Password')
