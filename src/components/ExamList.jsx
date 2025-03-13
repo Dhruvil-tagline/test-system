@@ -39,7 +39,7 @@ const ExamList = () => {
               exams && exams.map((val, index) => (
                   <div key={index} style={{ maxWidth: "600px", border: '1px solid gray', padding: '20px', borderRadius: '10px' }}>
                       <div>
-                          <h1>Subject Name
+                          <h1>Subject Name {' '}
                               {val.subjectName}</h1>
                       </div>
                       {/* <div>
